@@ -23,7 +23,7 @@ UPLOAD_FOLDER = "uploads"
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 load_dotenv()
-GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+GROQ_API_KEY = "TEST"
 groq_client = Groq(api_key=GROQ_API_KEY)
 llama_model = "llama-3.3-70b-specdec"
 current_dataset = None

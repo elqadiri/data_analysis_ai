@@ -1,0 +1,8 @@
+Flask
+python-dotenv
+groq
+seaborn
+pandas
+matplotlib
+scipy
+plotly

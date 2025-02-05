@@ -1,0 +1,21 @@
+# Ignore everything by default
+**
+
+# Allow specific files and directories needed for the build
+!/app.py
+!/requirements.txt
+!/templates/
+!/static/
+!/.env
+
+# Explicitly ignore unnecessary files and directories
+__pycache__/
+*.pyc
+*.log
+*.sqlite3
+*.db
+*.env.example
+*.DS_Store
+.git
+.vscode/
+.idea/
