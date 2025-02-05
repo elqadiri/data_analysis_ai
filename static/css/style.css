@@ -1,0 +1,149 @@
+/* Thème sombre global */
+body {
+    background-color: #121212;
+    color: #ffffff;
+    font-family: 'Inter', sans-serif;
+}
+
+/* Upload Zone */
+.upload-zone {
+    border: 2px dashed #444444;
+    transition: all 0.3s ease;
+}
+
+.upload-zone:hover {
+    border-color: #56d6ff;
+    background-color: #282828;
+}
+
+/* Boutons */
+.btn-primary {
+    background-color: #56d6ff;
+    color: #121212;
+    border: none;
+    transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+    background-color: #33b5e5;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+.btn-secondary {
+    background-color: #34c759;
+    color: #121212;
+    border: none;
+    transition: all 0.2s ease;
+}
+
+.btn-secondary:hover {
+    background-color: #2e7d32;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Input et textarea */
+textarea, input[type="text"], input[type="file"] {
+    background-color: #282828;
+    color: #ffffff;
+    border: 1px solid #444444;
+    border-radius: 8px;
+    padding: 0.75rem;
+    transition: all 0.2s ease;
+}
+
+textarea:focus, input[type="text"]:focus, input[type="file"]:focus {
+    border-color: #56d6ff;
+    outline: none;
+    box-shadow: 0 0 8px rgba(86, 214, 255, 0.5);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    #sidebar {
+        width: 100%; /* La sidebar prend toute la largeur */
+    }
+
+    #mainContent {
+        width: 70%; /* Les sections centrales prennent toute la largeur */
+    }
+    #resultSection {
+        width: 100%; /* Les sections centrales prennent toute la largeur */
+    }
+}
+
+/* Modale */
+#uploadModal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+#uploadModal.hidden {
+    display: none;
+}
+
+/* Upload Zone dans la Modale */
+.upload-zone {
+    border: 2px dashed #444444;
+    transition: all 0.3s ease;
+}
+
+.upload-zone:hover {
+    border-color: #56d6ff;
+    background-color: #282828;
+}
+
+.button-main {
+    display: inline-block;
+    position: relative;
+    background: #00C853;
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+    border-radius: 5px;
+    border: none;
+    outline: none;
+    font-size: 14px;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: 600;
+    padding: 10px 25px 10px 15px;
+    transition: background 0.3s ease-in-out;
+    transform: translateY(-15px); /* Moved up a bit */
+  }
+  
+  .button-icon {
+    z-index: 1;
+    background: #00C853;
+    box-shadow: 0px 0px 0px 5px #212121;
+    position: absolute;
+    border-radius: 4px;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 6px 8px;
+    transition: 0.18s;
+  }
+  
+  .button-icon-default {
+    margin-right: -9px;
+  }
+  
+  .button-icon-hover {
+    margin-right: -11px;
+  }
+  
+  /* Animation au survol */
+  .button-main:hover .button-icon {
+    margin-right: -11px;
+  }
+  

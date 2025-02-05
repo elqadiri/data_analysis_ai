@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analyse de Dataset</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="bg-gray-900 text-white font-sans">
+    <!-- Conteneur principal -->
+<!-- Conteneur principal -->
+<div class="flex h-screen">
+    
+    <div id="mainContent" class="flex-grow bg-gray-800 p-6 overflow-y-auto relative">
+        <div class="absolute bottom-0 left-0 right-0 p-6 bg-gray-800">
+            <h2 class="text-xl font-semibold mb-4">Posez vos questions</h2>
+            <textarea id="userPrompt" 
+                      placeholder="Que souhaitez-vous savoir à propos de votre dataset ?" 
+                      class="w-3/4 p-3 border border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
+                      rows="1"></textarea>
+            <a href="#" onclick="sendPrompt()" class="button-main relative inline-block">
+                <i class="fa fa-arrow-right button-icon button-icon-default" aria-hidden="true"></i>
+            </a>
+                      
+        </div>
+    </div>
+    
+
+    <!-- Section Droite (Résultats + Exécution de Code) -->
+    <div id="resultSection" class="w-1/2 bg-gray-800 p-6 overflow-y-auto">
+        <h2 class="text-xl font-semibold mb-4">Résultats</h2>
+        <div id="resultContainer" class="p-4 bg-gray-700 border border-gray-700 rounded-lg text-sm text-gray-400">
+            <!-- Zone de texte éditable pour afficher et modifier le code -->
+            <textarea id="editableCode" 
+                    class="w-full p-3 bg-gray-900 text-white border border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
+                    rows="10" placeholder="Le code apparaîtra ici..."></textarea>
+        </div>
+        <!-- Section "Exécuter le Code" masquée par défaut -->
+        <div id="executeCodeSection" class="mt-6 hidden">
+            <h3 class="text-lg font-semibold mb-2">Exécuter le Code</h3>
+            <button onclick="executeCode()" 
+                    class="btn-secondary bg-green-500 text-white py-2 px-6 rounded-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">
+                Appliquer le Code
+            </button>
+            <div id="executionResult" class="p-4 bg-gray-700 border border-gray-700 rounded-lg text-sm text-gray-400 mt-4">
+                Résultat de l'exécution du code...
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal d'upload (caché par défaut) -->
+<div id="uploadModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+    <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
+        <h2 class="text-xl font-semibold mb-4">Uploader un dataset</h2>
+        <form id="uploadFormModal" class="space-y-4">
+            <div class="upload-zone p-8 rounded-lg text-center bg-gray-700 border-2 border-dashed border-gray-600">
+                <input type="file" id="datasetFileModal" name="datasetFile" accept=".csv, .xlsx, .xls" class="hidden">
+                <label for="datasetFileModal" class="cursor-pointer flex flex-col items-center space-y-2">
+                    <svg class="w-12 h-12 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                    </svg>
+                    <span class="text-gray-400">Cliquez ou glissez votre fichier ici</span>
+                </label>
+            </div>
+            <button type="button" onclick="uploadDatasetModal()" class="btn-primary w-full bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+                Uploader le dataset
+            </button>
+            <pre id="uploadResponseModal" class="bg-gray-700 p-4 rounded-lg text-sm text-gray-400 hidden overflow-x-auto" style="white-space: pre-wrap;"></pre>
+        </form>
+    </div>
+</div>
+    <script src="{{ url_for('static',filename = 'js/script.js') }}"></script>
+</body>
+</html>
