@@ -162,3 +162,93 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   });
   
+// message section
+async function loadMessages() {
+    const response = await fetch('/get_messages');
+    const messages = await response.json();
+
+    const chatContainer = document.getElementById('chatContainer');
+    chatContainer.innerHTML = ''; // Efface les messages existants
+
+    // Parcourir les messages et les afficher
+    messages.forEach(msg => {
+        addMessageToUI(msg.sender, msg.message);
+    });
+}
+
+// Fonction pour ajouter un message à l'interface utilisateur
+function addMessageToUI(sender, message, isQuestion = false) {
+    const chatContainer = document.getElementById('chatContainer');
+    
+    // Créer un conteneur pour le message
+    const messageDiv = document.createElement('div');
+    messageDiv.className = sender === 'user' ? 'chat-message-user' : 'chat-message-system';
+    messageDiv.textContent = message;
+    
+    if (isQuestion) {
+        // Insérer la question en haut
+        chatContainer.prepend(messageDiv);
+    } else {
+        // Ajouter la réponse juste après la question
+        chatContainer.insertBefore(messageDiv, chatContainer.firstChild.nextSibling);
+    }
+    
+    // Faire défiler vers le haut (optionnel)
+    chatContainer.scrollTop = 0;
+}
+
+// Gestion de l'envoi de message
+function sendPrompt2() {
+    const userPrompt = document.getElementById('userPrompt').value.trim();
+
+    // Vérifie si le champ est vide
+    if (userPrompt === "") {
+        alert("Veuillez entrer un message.");
+        return;
+    }
+
+    // 1. Sauvegarder le message dans la base de données
+    fetch('/save_message', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ message: userPrompt })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (!data.success) {
+            throw new Error(data.error || "Erreur lors de l'enregistrement du message.");
+        }
+        return data;
+    })
+    .then(() => {
+        // 2. Ajouter la question à l'interface utilisateur
+        addMessageToUI('user', userPrompt, true);
+        document.getElementById('userPrompt').value = "";
+    })
+    .then(() => {
+        // 3. Envoyer la question au backend pour traitement
+        return fetch('/api/prompt', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ prompt: userPrompt })
+        });
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.response) {
+            const generatedCode = data.response;
+            document.getElementById('editableCode').value = generatedCode;
+            document.getElementById('executeCodeSection').classList.remove('hidden');
+            
+            // Ajouter la réponse juste après la question
+            addMessageToUI('system', `Résultat : ${generatedCode}`);
+        } else {
+            throw new Error(data.error || "Erreur lors du traitement de la requête.");
+        }
+    })
+    .catch(error => {
+        console.error("Erreur :", error);
+        alert("Une erreur s'est produite : " + error.message);
+    });
+}
+window.onload = loadMessages;

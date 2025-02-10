@@ -47,7 +47,7 @@ def prompt():
             return jsonify({"error": "No dataset is loaded. Please upload a file."}), 400
         dataset_info = f"Columns: {', '.join(current_dataset.columns)}"
         system_control = """
-        The response must be only minimal Python code without using ``` or plt.show(). 
+        The response must be only minimal Python code without using ``` or plt.show() and use print when you want to display the result. 
         Use the loaded dataset named 'current_dataset' to perform the requested operations.
         No comments, introductions, summaries, or additional explanations are required.
         Avoid using plotly. Use matplotlib or seaborn for static plots. Do not include plt.show().
@@ -148,5 +148,75 @@ def upload():
         current_dataset = pd.read_csv(os.path.join(app.config["UPLOAD_FOLDER"], file.filename)) if file.filename.endswith('.csv') else pd.read_excel(os.path.join(app.config["UPLOAD_FOLDER"], file.filename))
     return response, status_code
 
+import psycopg2
+
+postgres_pass = os.getenv("postgres_pass")
+DB_CONFIG = {
+    "dbname": "plat_ai_user",
+    "user": "postgres",
+    "password": postgres_pass,
+    "host": "localhost",
+    "port": "5432"
+}
+
+def get_db_connection():
+    return psycopg2.connect(**DB_CONFIG)
+
+def create_table_if_not_exists():
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("""
+            CREATE TABLE IF NOT EXISTS messages (
+                id SERIAL PRIMARY KEY,
+                message TEXT NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+        """)
+        conn.commit()
+        cursor.close()
+        conn.close()
+    except Exception as e:
+        print("Erreur lors de la création de la table :", e)
+
+create_table_if_not_exists()
+
+@app.route('/save_message', methods=['POST'])
+def save_message():
+    data = request.get_json()
+    user_message = data.get('message', '').strip()
+
+    if not user_message:
+        return jsonify({"error": "Message vide"}), 400
+
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO messages (message) VALUES (%s)", (user_message,))
+        conn.commit()
+        cursor.close()
+        conn.close()
+        return jsonify({"success": True, "message": "Message enregistré"})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route('/get_messages', methods=['GET'])
+def get_messages():
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM messages ORDER BY created_at ASC")
+        rows = cursor.fetchall()
+        conn.close()
+
+        # Convertir les résultats en une liste de dictionnaires
+        messages = [{"id": row[0], "message": row[1], "created_at": row[2], "sender": "user"} for row in rows]
+        return jsonify(messages), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+    
 if __name__ == "__main__":
     app.run(debug=True)

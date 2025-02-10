@@ -6,23 +6,37 @@
     <title>Analyse de Dataset</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 </head>
 <body class="bg-gray-900 text-white font-sans">
-    <!-- Conteneur principal -->
-<!-- Conteneur principal -->
+
 <div class="flex h-screen">
     
     <div id="mainContent" class="flex-grow bg-gray-800 p-6 overflow-y-auto relative">
-        <div class="absolute bottom-0 left-0 right-0 p-6 bg-gray-800">
-            <h2 class="text-xl font-semibold mb-4">Posez vos questions</h2>
-            <textarea id="userPrompt" 
-                      placeholder="Que souhaitez-vous savoir à propos de votre dataset ?" 
-                      class="w-3/4 p-3 border border-gray-700 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none"
-                      rows="1"></textarea>
-            <a href="#" onclick="sendPrompt()" class="button-main relative inline-block">
-                <i class="fa fa-arrow-right button-icon button-icon-default" aria-hidden="true"></i>
-            </a>
-                      
+        <!-- Zone de chat -->
+        <div id="chatContainer" class="chat-messages space-y-4 mb-8">
+            <!-- Les messages seront ajoutés ici dynamiquement -->
+        </div>
+    
+        <!-- Formulaire de saisie -->
+        <div class="absolute bottom-0 left-0 right-0 p-6 bg-gray-800 border-top">
+            <div class="relative w-full max-w-xl">
+                <h2 class="text-xl font-semibold mb-4">Posez vos questions</h2>
+                <div class="flex items-center border border-gray-700 rounded-lg overflow-hidden" style="background-color: #282828;">
+                    <textarea 
+                        id="userPrompt" 
+                        placeholder="Que souhaitez-vous savoir à propos de votre dataset ?" 
+                        class="w-full p-3 border-none focus:ring-0 focus:border-none resize-none"
+                        rows="1"></textarea>
+                    <button 
+                        class="button-main inline-flex items-center px-4 py-2 bg-blue-500 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        onclick="sendPrompt(); sendPrompt2()" 
+                        role="button" 
+                        aria-label="Envoyer la question">
+                        <i class="bi bi-cursor-fill button-icon button-icon-default" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
         </div>
     </div>
     
@@ -71,6 +85,7 @@
         </form>
     </div>
 </div>
+
     <script src="{{ url_for('static',filename = 'js/script.js') }}"></script>
 </body>
 </html>
